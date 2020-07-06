@@ -14,5 +14,7 @@ It is a computational system consisting of graph structure with connection weigh
 attempting to mimic the neural connections in our nervous system.
 
 #### References
+* 3Blue1Brown Youtube channel: https://www.youtube.com/channel/UCYO_jab_esuFRV4b17AJtAw
 * Neural networks from scratch e-book: https://nnfs.io/
-* Sentdex youtube channel: https://www.youtube.com/user/sentdex/
+* Sentdex Youtube channel: https://www.youtube.com/user/sentdex/
+* Deep Learning for Computer Vision with Python VOL1 by Dr.Adrian Rosebrock
