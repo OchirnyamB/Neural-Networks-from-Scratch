@@ -25,7 +25,8 @@ class NeuralNetwork:
         # connections aneed a bias term but the output does not
         w = np.random.rand(layers[-2]+1, layers[-1])
         self.W.append(w/np.sqrt(layers[-2]))
-
+        print(self.W)
+        
     def __repr__(self):
         # Construct and return a string that represents the network architecture
         return "NeuralNetwork: {}".format("-".join(str(l) for l in self.layers))
@@ -56,26 +57,49 @@ class NeuralNetwork:
     def fit_partial(self, x, y):
         # The first activation is a special case, it's just the input feature vector itself
         A = [np.atleast_2d(x)]
-        # FEEDFORWARD - loop over the layers of the network
-        for layer in np.arange(0, len(self.layers)):
+
+        # Forward pass - loop over the layers of the network
+        for layer in np.arange(0, len(self.W)):
            # Weighted sum
-           wsum = A[layer].dot.(self.W[layer])
+           wsum = A[layer].dot(self.W[layer])
            # Activation function
            net = self.sigmoid(wsum)
            # Once we have the net output, add it to our list of acivations
            A.append(net)
-        # BACKPROPAGATION
+
+        # Backward pass
         error = A[-1]-y
-        D = [error * self.sigmoid_deriv([A-1])]
-        delta = D[-1].dot(self.W[layer].T)
-        delta = delta * self.sigmoid_deriv(A[layer])
+        D = [error * self.sigmoid_deriv(A[-1])]
+        
+        # Chain Rule
+        for layer in np.arange(len(A)-2, 0, -1):
+        # The delta for the current layer is equal to the delta of the previous layer D[-1]
+        # dotted with the weight matrix of the current layer, followed by multiplying the delta
+        # by the derivative of the nonlinear activation function
+            delta = D[-1].dot(self.W[layer].T)
+            delta = delta * self.sigmoid_deriv(A[layer])
+            D.append(delta)
+        # Since we looped over our layers in reverse order we need to reverse the deltas
+        D = D[::-1]
+
+        # WEIGHT UPDATE
+        for layer in np.arange(0, len(self.W)):
+            self.W[layer] += -self.alpha*A[layer].T.dot(D[layer])
+
     # Forward propagation to obtain the final output prediction
     def predict(self, X):
         # Ensure that our input is a matrix
-        X = np.atleast_2d(X)
-        X = np.c_[X, np.ones((X.shape[0]))] 
+        pred = np.atleast_2d(X)
+        pred = np.c_[pred, np.ones((pred.shape[0]))] 
         
         # Loop over our layers in the network
-        for layer in np.arange(0, len(self.layers)):
-            pred = self.sigmoid(np.dot(p, self.W[layer]))
+        for layer in np.arange(0, len(self.W)):
+            pred = self.sigmoid(np.dot(pred, self.W[layer]))
         return pred
+
+    # Calculate the loss across our entire training set
+    def calculate_loss(self, X, targets):
+        targets = np.atleast_2d(targets)
+        predictions = self.predict(X)
+        loss = 0.5*np.sum((predictions-targets)**2)
+        return loss
