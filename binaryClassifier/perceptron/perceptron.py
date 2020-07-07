@@ -20,6 +20,7 @@ class Perceptron:
 
     # Training procedure function
     def fit(self, X, y, epochs):
+        # Insert column of 1s as the last entry in feature matrix for bias
         X=np.c_[X, np.ones((X.shape[0]))]
         # Loop over the desired number of epochs
         for epoch in np.arange(0, epochs):
