@@ -1,8 +1,5 @@
 import numpy as np
 
-# Gaussian disribution rounded around 0
-np.random.seed(0)
-
 # Basic Perceptron training algorithm that solves the BITWISE operators XOR using Backpropogation
 
 # 3-3-1 Network due to the addition of the bias term embedded in the weight matrix
@@ -25,7 +22,6 @@ class NeuralNetwork:
         # connections aneed a bias term but the output does not
         w = np.random.rand(layers[-2]+1, layers[-1])
         self.W.append(w/np.sqrt(layers[-2]))
-        print(self.W)
         
     def __repr__(self):
         # Construct and return a string that represents the network architecture
@@ -48,10 +44,10 @@ class NeuralNetwork:
             for(x, target) in zip(X, y):
                 self.fit_partial(x, target)
                 
-                # Check to see if we should display a training update
-                if epoch == 0 or (epoch+1) % displayUpdate == 0:
-                    loss = self.calculate_loss(X,y)
-                    print("[INFO] epoch={}, loss={:.7f}".format(epoch+1), loss)
+            # Check to see if we should display a training update
+            if epoch == 0 or (epoch+1) % displayUpdate == 0:
+                loss = self.calculate_loss(X,y)
+                print("[INFO] epoch={}, loss={:.7f}".format(epoch+1, loss))
     
     # The actual heart of the backpropagation algorithm
     def fit_partial(self, x, y):
@@ -82,24 +78,27 @@ class NeuralNetwork:
         # Since we looped over our layers in reverse order we need to reverse the deltas
         D = D[::-1]
 
-        # WEIGHT UPDATE
+        # Weight update
         for layer in np.arange(0, len(self.W)):
             self.W[layer] += -self.alpha*A[layer].T.dot(D[layer])
 
     # Forward propagation to obtain the final output prediction
-    def predict(self, X):
+    def predict(self, X, addBias=True):
         # Ensure that our input is a matrix
-        pred = np.atleast_2d(X)
-        pred = np.c_[pred, np.ones((pred.shape[0]))] 
-        
+        p = np.atleast_2d(X)
+
+        if addBias:
+            p = np.c_[p, np.ones((p.shape[0]))]
+
         # Loop over our layers in the network
         for layer in np.arange(0, len(self.W)):
-            pred = self.sigmoid(np.dot(pred, self.W[layer]))
-        return pred
+            p = self.sigmoid(np.dot(p, self.W[layer]))
+        return p
 
     # Calculate the loss across our entire training set
     def calculate_loss(self, X, targets):
         targets = np.atleast_2d(targets)
-        predictions = self.predict(X)
+        predictions = self.predict(X, addBias=False)
+
         loss = 0.5*np.sum((predictions-targets)**2)
         return loss

@@ -48,7 +48,7 @@ def backPropagation(self, x, y):
         # Since we looped over our layers in reverse order we need to reverse the deltas
         D = D[::-1]
 
-        # WEIGHT UPDATE
+        # Weight update
         for layer in np.arange(0, len(self.W)):
             self.W[layer] += -self.alpha*A[layer].T.dot(D[layer])
 ```
