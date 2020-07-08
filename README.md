@@ -3,8 +3,8 @@ Building basic neural network from scratch with Python
 
 ### Requirements:
 * python3
-* numpy V1.18.2
-* matplotlib V3.2.1
+* numpy V1.18.2+
+* matplotlib V3.2.1+
 * nnfs latestV
 
 ### The Goal of Machine Learning?
