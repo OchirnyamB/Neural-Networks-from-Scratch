@@ -13,6 +13,7 @@ Building basic neural network from scratch with Python
 ### What is Artificial Neural Network (ANN)?
 > It is a computational system consisting of graph structure with connection weights and biases that are modifiable using a learning algorithm while
 > attempting to mimic the neural connections in our nervous system.
+![ann](resources/ann2.JPG)
 
 ### What is the most important algorithm in NN history?
 **Backpropagation** can be considered the cornerstone of modern NNs and deep learning.
